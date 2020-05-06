@@ -10,14 +10,23 @@ binary_tree_t *binary_tree_node(binary_tree_t *parent, int value)
 {
 	binary_tree_t *node = NULL;
 
-	node = calloc(1, sizeof(binary_tree_t));
+	node = malloc(sizeof(heap_t));
 	if (!node)
 		return (NULL);
-	node->n = value;
 	if (parent == NULL)
+	{
 		node->parent = NULL;
+		node->right = NULL;
+		node->left = NULL;
+		node->n = value;
+		return (node);
+	}
 	else
+	{
 		node->parent = parent;
-
-	return (node);
+		node->right = NULL;
+		node->left = NULL;
+		node->n = value;
+		return (node);
+	}
 }
