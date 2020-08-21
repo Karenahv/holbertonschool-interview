@@ -1,32 +1,32 @@
 #!/usr/bin/node
-const id = process.argv[2];
-const url = 'https://swapi-api.hbtn.io/api/films/' + id;
-const request = require('request');
 
-function retrive (urlChar) {
+let request = '';
+let id = '';
+let url = '';
+
+request = require('request');
+id = process.argv[2];
+url = 'https://swapi-api.hbtn.io/api/films/' + id;
+
+const myRequest = (url) => {
   return new Promise(function (resolve, reject) {
-    request(urlChar, function getChar (err2, response2, body2) {
-      if (err2) {
-        reject(err2);
+    request(url, function (error, res, body) {
+      if (!error && res.statusCode === 200) {
+        resolve(body);
       } else {
-        resolve(JSON.parse(body2).name);
+        reject(error);
       }
     });
   });
-}
+};
 
-async function getlist (urlist) {
-  for (const urlChar of urlist) {
-    const character = await retrive(urlChar);
-    console.log(character);
+const answer = async (url) => {
+  let res = await myRequest(url);
+  res = JSON.parse(res).characters;
+  for (let i = 0; i < res.length; i++) {
+    const res2 = await myRequest(res[i]);
+    console.log(JSON.parse(res2).name);
   }
-}
+};
 
-request(url, function getList (err, response, body) {
-  if (err) {
-    throw err;
-  } else {
-    const urlist = JSON.parse(body).characters;
-    getlist(urlist);
-  }
-});
+answer(url);
